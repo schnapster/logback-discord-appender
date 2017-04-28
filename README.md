@@ -44,8 +44,9 @@ Configure the appender in your logback.xml:
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%d{HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```</pattern>
         </layout>
-        <username></username>
-        <avatarUrl></avatarUrl>
+        <!-- Fill in username and avatarUrl with your desired values -->
+        <username>Discurd</username>
+        <avatarUrl>http://i.imgur.com/UoiA3OQ.png</avatarUrl>
     </appender>
 
     <appender name="ASYNC_DISCORD" class="ch.qos.logback.classic.AsyncAppender">
