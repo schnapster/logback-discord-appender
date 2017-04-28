@@ -16,7 +16,7 @@ Add through the [JitPack](https://jitpack.io/) repo to your project:
     <dependency>
         <groupId>com.github.napstr</groupId>
         <artifactId>logback-discord-appender</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
     </dependency>
 ```
 ###### Gradle build.gradle
@@ -27,7 +27,7 @@ Add through the [JitPack](https://jitpack.io/) repo to your project:
 
 
     dependencies {
-        compile 'com.github.napstr:logback-discord-appender:0.0.1'
+        compile 'com.github.napstr:logback-discord-appender:0.0.2'
     }
 
 ```
