@@ -34,7 +34,8 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     @Override
     protected void append(final ILoggingEvent event) {
 
-        if (webhookUri == null || "".equals(webhookUri)) {
+
+        if(webhookUri == null || webhookUri.isEmpty()){
             addWarn("No webhookUri set, can't send logs to Discord.");
             return;
         }
@@ -72,6 +73,7 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
+        response.body().close();
         if (response.code() != 200) {
             addError("Error posting log to Discord: Request returned " + response.code() + " " + response.body().string());
         }
