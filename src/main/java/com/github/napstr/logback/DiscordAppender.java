@@ -4,7 +4,11 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,7 +24,6 @@ import java.util.Map;
 public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final MediaType FORM = MediaType.parse("multipart/form-data; charset=utf-8");
 
     private OkHttpClient client = new OkHttpClient();
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -34,14 +37,19 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     @Override
     protected void append(final ILoggingEvent event) {
 
-
-        if(webhookUri == null || webhookUri.isEmpty()){
-            addWarn("No webhookUri set, can't send logs to Discord.");
+        if (webhookUri == null || webhookUri.isEmpty()) {
+            String msg = "No webhookUri set, can't send logs to Discord.";
+            addWarn(msg);
+            System.err.println(msg);
             return;
         }
 
+        String text = "";
         try {
-            String text = layout.doLayout(event);
+            text = layout.doLayout(event);
+            // omit empty code blocks
+            text = text.replaceAll("```\\s```", "");
+
             boolean saveCodeBlock = text.endsWith("```"); //preserve end of a code block, a very likely use case
             if (text.length() > 2000) {
                 if (saveCodeBlock) {
@@ -60,22 +68,27 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
             post(webhookUri, json);
         } catch (Exception e) {
+            String msg = "Error posting log to Discord: " + event + "\n" + text;
+            addError(msg, e);
+            System.err.println(msg);
             e.printStackTrace();
-            addError("Error posting log to Discord: " + event, e);
         }
     }
 
-    private void post(String uri, String json) throws IOException {
-        String url = uri + "?wait=true";
+    private void post(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .build();
-        Response response = client.newCall(request).execute();
-        response.body().close();
-        if (response.code() != 200) {
-            addError("Error posting log to Discord: Request returned " + response.code() + " " + response.body().string());
+        try (Response response = client.newCall(request).execute()) {
+            if (response.code() >= 300) {
+                String msg = "Error posting log to Discord: Request returned " + response.code()
+                        + "\nHeaders" + response.headers().toString()
+                        + "\nBody:" + (response.body() != null ? response.body().string() : "Null body");
+                addError(msg);
+                System.err.println(msg);
+            }
         }
     }
 
