@@ -16,7 +16,7 @@ Add through the [JitPack](https://jitpack.io/) repo to your project:
     <dependency>
         <groupId>com.github.napstr</groupId>
         <artifactId>logback-discord-appender</artifactId>
-        <version>0.0.4</version>
+        <version>0.0.5</version>
     </dependency>
 ```
 ###### Gradle build.gradle
@@ -27,7 +27,7 @@ Add through the [JitPack](https://jitpack.io/) repo to your project:
 
 
     dependencies {
-        compile 'com.github.napstr:logback-discord-appender:0.0.4'
+        compile 'com.github.napstr:logback-discord-appender:0.0.5'
     }
 
 ```
@@ -76,5 +76,9 @@ You can set the webhookUri at runtime with this code:
 
 
 ### Todos:
-- Enforce Discord ratelimits
-- Support for tts, embeds and/or files
+- Support for tts, embeds (?) and/or files (?)
+
+### Changelog:
+
+#### 0.0.5
+- Handle Discord rate limits
