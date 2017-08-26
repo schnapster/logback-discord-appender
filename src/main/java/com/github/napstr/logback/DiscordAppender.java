@@ -34,6 +34,7 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private Layout<ILoggingEvent> layout;
     private String username;
     private String avatarUrl;
+    private boolean tts = false;
 
     private final BlockingDeque<String> queue = new LinkedBlockingDeque<>();
 
@@ -59,10 +60,11 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                 return;
             }
 
-            Map<String, String> message = new HashMap<>();
+            Map<String, Object> message = new HashMap<>();
             message.put("content", text);
             message.put("username", username);
             message.put("avatar_url", avatarUrl);
+            message.put("tts", tts);
 
             String json = objectMapper.writeValueAsString(message);
 
@@ -165,5 +167,13 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public boolean isTts() {
+        return tts;
+    }
+
+    public void setTts(boolean tts) {
+        this.tts = tts;
     }
 }

@@ -16,7 +16,7 @@ Add through the [JitPack](https://jitpack.io/) repo to your project:
     <dependency>
         <groupId>com.github.napstr</groupId>
         <artifactId>logback-discord-appender</artifactId>
-        <version>0.0.5</version>
+        <version>1.0.0</version>
     </dependency>
 ```
 ###### Gradle build.gradle
@@ -27,7 +27,7 @@ Add through the [JitPack](https://jitpack.io/) repo to your project:
 
 
     dependencies {
-        compile 'com.github.napstr:logback-discord-appender:0.0.5'
+        compile 'com.github.napstr:logback-discord-appender:1.0.0'
     }
 
 ```
@@ -47,6 +47,7 @@ Configure the appender in your logback.xml:
         <!-- Fill in username and avatarUrl with your desired values -->
         <username>Discurd</username>
         <avatarUrl>http://i.imgur.com/UoiA3OQ.png</avatarUrl>
+        <tts>false</tts>
     </appender>
 
     <appender name="ASYNC_DISCORD" class="ch.qos.logback.classic.AsyncAppender">
@@ -76,9 +77,12 @@ You can set the webhookUri at runtime with this code:
 
 
 ### Todos:
-- Support for tts, embeds (?) and/or files (?)
+- Support embeds (?) and/or files (?)
 
 ### Changelog:
+
+#### 1.0.0
+- Added tts support
 
 #### 0.0.5
 - Handle Discord rate limits

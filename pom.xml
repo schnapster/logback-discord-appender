@@ -5,11 +5,11 @@
 
     <groupId>com.github.napstr</groupId>
     <artifactId>logback-discord-appender</artifactId>
-    <version>0.0.5</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>Logback Appender for Discord</name>
-    <url>https://jitpack.io/#napstr/logback-discord-appender/0.0.5</url>
+    <url>https://jitpack.io/#napstr/logback-discord-appender/1.0.0</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
