@@ -27,8 +27,8 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private OkHttpClient client = new OkHttpClient();
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final OkHttpClient client = new OkHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private String webhookUri;
     private Layout<ILoggingEvent> layout;
@@ -39,7 +39,7 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private final BlockingDeque<String> queue = new LinkedBlockingDeque<>();
 
     public DiscordAppender() {
-        new Thread(() -> {
+        Thread workerThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
                     post(queue.take());
@@ -48,7 +48,9 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                     e.printStackTrace();
                 }
             }
-        }, "discord-appender").start();
+        }, "discord-appender");
+        workerThread.setDaemon(true);
+        workerThread.start();
     }
 
     @SuppressWarnings("ConstantConditions")
